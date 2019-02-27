@@ -26,7 +26,7 @@ http://www.netexl.com/howtoplay/sevens-out/
 https://en.wikipedia.org/wiki/Sevens,_Elevens,_and_Doubles
 '''
 throws = np.array([])
-NUMBER_OF_TRIES = 100 #This value can be increased for more sophisticated simulations
+NUMBER_OF_TRIES = 10000 #This value can be increased for more sophisticated simulations
 throws = np.array([[np.random.randint(low=1,high=7),np.random.randint(low=1,high=7)] for i in range(NUMBER_OF_TRIES)])
 
 #We can count the throws.
@@ -68,8 +68,8 @@ avgSumOfThrow = np.average(sumOfThrow)
 stdSumOfThrow = np.std(sumOfThrow)
 
 from scipy import stats
-ksResult =stats.kstest((sumOfThrow - avgSumOfThrow)/stdSumOfThrow,'norm')
-#ksResult = stats.kstest(sumOfThrow,'norm',args=(avgSumOfThrow,stdSumOfThrow))
+#ksResult =stats.kstest((sumOfThrow - avgSumOfThrow)/stdSumOfThrow,'norm')
+ksResult = stats.kstest(sumOfThrow,'norm',args=(avgSumOfThrow,stdSumOfThrow), N=NUMBER_OF_TRIES)
 KS_REJECTION_LEVEL = 0.05
 if ksResult.pvalue < KS_REJECTION_LEVEL:
     print("Sum of Dices does not follow Normal Distribution")
