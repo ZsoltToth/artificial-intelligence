@@ -28,4 +28,8 @@ plt.hist(df.Weight, cumulative=True)
 plt.title("CDF of Weight")
 plt.show()
 
-ksResult = scipy.stats.kstest(df.Weight,'norm',args=(df.Weight.mean(),df.Weight.var()))
+ksResult = scipy.stats.kstest(
+    df.Weight,'norm',args=(
+        df.Weight.mean(),
+        df.Weight.std()),
+    N=df.Weight.size)

@@ -69,9 +69,13 @@ stdSumOfThrow = np.std(sumOfThrow)
 
 from scipy import stats
 #ksResult =stats.kstest((sumOfThrow - avgSumOfThrow)/stdSumOfThrow,'norm')
-ksResult = stats.kstest(sumOfThrow,'norm',args=(avgSumOfThrow,stdSumOfThrow), N=NUMBER_OF_TRIES)
+ksResult = stats.kstest(
+    sumOfThrow,
+    'norm',
+    args=(avgSumOfThrow,stdSumOfThrow),
+    N=NUMBER_OF_TRIES)
 KS_REJECTION_LEVEL = 0.05
-if ksResult.pvalue < KS_REJECTION_LEVEL:
+if ksResult.pvalue < 1 - KS_REJECTION_LEVEL:
     print("Sum of Dices does not follow Normal Distribution")
 else:
     print("Sum of Dices follows Normal Distribution")
