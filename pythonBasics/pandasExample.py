@@ -1,4 +1,6 @@
 import  pandas as pd
+import matplotlib.pyplot as plt
+import scipy.stats
 
 df = pd.read_csv('data/dataset.csv')
 '''
@@ -12,3 +14,18 @@ df = pd.read_csv('data/dataset.csv')
 8) Calculate their correlation matrix.
  
 '''
+
+print(df[df.Error == False])
+print("There are %d waste in the dataset" %df[df.Error == True].shape[0])
+print("Expected Length of a product is %lf" % df.Length.mean())
+print("Variance of Width is %lf" % df.Width.var())
+
+plt.hist(df.Weight)
+plt.title("PDF of Weight")
+plt.show()
+plt.clf()
+plt.hist(df.Weight, cumulative=True)
+plt.title("CDF of Weight")
+plt.show()
+
+ksResult = scipy.stats.kstest(df.Weight,'norm',args=(df.Weight.mean(),df.Weight.var()))
