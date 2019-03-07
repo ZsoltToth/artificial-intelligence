@@ -33,3 +33,24 @@ ksResult = scipy.stats.kstest(
         df.Weight.mean(),
         df.Weight.std()),
     N=df.Weight.size)
+
+
+plt.clf()
+#Lets calculate the correlation matrix of the continuous features
+corr = df[['Weight','Length','Width','Height']].corr();
+#Correlation matrix can be visualized with PyCharm "View as DataFrame"
+'''
+First visualize this correlation matrix with pyplot.
+'''
+plt.imshow(corr)
+plt.title("Correlation Matrix with Pyplot")
+plt.show()
+plt.clf()
+
+'''
+We can use seaborn to create fancy figures 
+'''
+import seaborn as sns
+sns.heatmap(corr.abs(),square=True)
+plt.title("Correlation Matrix with Seaborn")
+plt.show()
