@@ -101,3 +101,19 @@ Year Charges Export Expenditures Journals Researchers
 2006
 etc.
 '''
+#First, the dataframe has to be composed.
+#We simply query GBR from our separate data sets and concate the results.
+gbr = pd.concat([
+    charges[charges['Country Code'] == 'GBR'],
+    HTExport[HTExport['Country Code'] == 'GBR'],
+    expenditures[expenditures['Country Code'] == 'GBR'],
+    journalArticles[journalArticles['Country Code'] == 'GBR'],
+    researchers[researchers['Country Code'] == 'GBR']
+])
+#We have to insert a column which denote the indicators
+gbr.insert(loc=0, column='Indicator',value=['Charges','Export','Expenditure','Journals','Researchers'])
+#Then we drop the Country Name and Code because they became useless
+gbr = gbr.drop(['Country Name','Country Code'],axis=1)
+#Next, we set the recently added column as index and transpose the data frame
+#The axis is renamed to Years and the index is reseted.
+gbr = gbr.set_index('Indicator').T.rename_axis("Years").reset_index()
