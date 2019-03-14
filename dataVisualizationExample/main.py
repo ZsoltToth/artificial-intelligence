@@ -33,3 +33,29 @@ Bonus task:
 Title should contain the Region.
 '''
 
+'''
+Transform the dataset in order to the country codes became columns and the year becomes also a column 
+'''
+
+#grpByCountries = population.drop(['Country Name','Indicator Name','Indicator Code'],axis=1).groupby(by='Country Code').mean().reset_index()
+grpByCountries = population.drop(['Country Name','Indicator Name','Indicator Code'],axis=1).melt('Country Code').pivot(index='variable',columns='Country Code', values='value')
+'''
+Question: In which countires changed the population similarly?
+i) Correlation Matrix
+'''
+corr = grpByCountries.corr().abs()
+plt.imshow(corr);
+plt.show()
+'''
+In which countries changed the population similarly to HUN
+'''
+corr['HUN'][corr.abs()['HUN'] > .8]
+
+import seaborn as sns
+sns.heatmap(corr.abs(),square=True)
+plt.title("Correlation Matrix with Seaborn")
+plt.show()
+
+'''
+
+'''
