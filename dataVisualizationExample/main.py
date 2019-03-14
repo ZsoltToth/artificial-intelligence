@@ -38,12 +38,13 @@ Transform the dataset in order to the country codes became columns and the year 
 '''
 
 #grpByCountries = population.drop(['Country Name','Indicator Name','Indicator Code'],axis=1).groupby(by='Country Code').mean().reset_index()
-grpByCountries = population.drop(['Country Name','Indicator Name','Indicator Code'],axis=1).melt('Country Code').pivot(index='variable',columns='Country Code', values='value')
+#grpByCountries = population.drop(['Country Name','Indicator Name','Indicator Code'],axis=1).melt('Country Code').pivot(index='variable',columns='Country Code', values='value')
+populationTransposed = population.drop(['Country Name','Indicator Name','Indicator Code'],axis=1).set_index('Country Code').transpose();
 '''
 Question: In which countires changed the population similarly?
 i) Correlation Matrix
 '''
-corr = grpByCountries.corr().abs()
+corr = populationTransposed.corr()
 plt.imshow(corr);
 plt.show()
 '''
