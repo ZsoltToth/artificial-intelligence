@@ -23,7 +23,7 @@ hunPopulation = [population[population['Country Code'] == 'HUN']
 
 plt.plot(years, hunPopulation)
 plt.show()
-
+del years, hunPopulation
 '''
 Task
 Generate a line chart for each country. 
@@ -39,7 +39,7 @@ Transform the dataset in order to the country codes became columns and the year 
 
 #grpByCountries = population.drop(['Country Name','Indicator Name','Indicator Code'],axis=1).groupby(by='Country Code').mean().reset_index()
 #grpByCountries = population.drop(['Country Name','Indicator Name','Indicator Code'],axis=1).melt('Country Code').pivot(index='variable',columns='Country Code', values='value')
-populationTransposed = population.drop(['Country Name','Indicator Name','Indicator Code'],axis=1).set_index('Country Code').transpose();
+populationTransposed = population.drop(['Country Name','Indicator Name','Indicator Code','2018'],axis=1).set_index('Country Code').transpose();
 '''
 Question: In which countires changed the population similarly?
 i) Correlation Matrix
@@ -58,5 +58,40 @@ plt.title("Correlation Matrix with Seaborn")
 plt.show()
 
 '''
+Perform Principla Component Analysis and Visualize the results.
 
+First we have to remove the records with missing data and scale the dataset. 
 '''
+popFiltered = population.drop(['Country Name','Indicator Name','Indicator Code','2018'],axis=1).dropna()
+from sklearn.preprocessing import StandardScaler
+countryCodes = popFiltered['Country Code']
+
+scaledPop = StandardScaler().fit_transform(popFiltered.drop(['Country Code'], axis=1))
+#This is the same
+#scaler = StandardScaler().fit(popTFiltered)
+#scaler.transform(popTFiltered)
+'''
+We define the number of Principal Components to 2. 
+Hence, the data set can be mapped to a 2D Scatter Chart. 
+'''
+from sklearn.decomposition import PCA
+
+pca = PCA(n_components=2)
+
+#Transforming the dataset into the Vector Space of the Principal Components
+#pca.fit(scaledPop)
+#pcaDF = pd.DataFrame(data= pca.transform(scaledPop),columns=['PC1','PC2'])
+pcaDF = pd.DataFrame(data= pca.fit_transform(scaledPop),columns=['PC1','PC2'])
+pd.concat([pcaDF,countryCodes],axis=1)
+'''
+Visualization of the Countries on the Scatter Chart
+Scatter chart is annotated with the Country Codes
+'''
+plt.clf()
+fig = plt.scatter(pcaDF['PC1'],pcaDF['PC2'])
+plt.title('2D PCA Projection of Population Changes of Countries')
+plt.xlabel('PC1')
+plt.ylabel('PC2')
+for i, cc in enumerate(countryCodes):
+    plt.annotate(cc,(pcaDF['PC1'][i],pcaDF['PC2'][i]))
+plt.show()
