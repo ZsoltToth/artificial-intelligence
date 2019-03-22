@@ -44,4 +44,14 @@ hun = pd.read_excel('./data/hungary.xls',
                     sheet_name='Data')
 
 #Selec a row based on the value of a column
-hun[hun['Indicator Code'] == 'TX.VAL.MRCH.CD.WT']
+mrchExp = hun[hun['Indicator Code'] == 'TX.VAL.MRCH.CD.WT']
+mrchExp = mrchExp.drop(['Country Name', 'Country Code',
+                        'Indicator Name', 'Indicator Code'], axis=1)
+
+mrchExp = mrchExp.T.reset_index()
+mrchExp = mrchExp.rename(columns={mrchExp.columns[0] : 'years', mrchExp.columns[1] : 'export'})
+
+plt.clf()
+plt.plot(mrchExp['years'],mrchExp['export'])
+plt.title('Merchandise Export of Hungary US$')
+plt.show()
