@@ -59,15 +59,64 @@ plt.plot(mrchExp['years'],mrchExp['export'])
 plt.title('Merchandise Export of Hungary US$')
 #plt.savefig('merhandise.png')
 plt.show()
+del mrchExp
+
 
 SELECTED_INDICATORS = ['TX.VAL.MRCH.CD.WT','MS.MIL.XPND.CN','MS.MIL.MPRT.KD']
 hunSelectedFeatures = hun[hun['Indicator Code'].isin(SELECTED_INDICATORS)]
 hunSelectedFeatures = hunSelectedFeatures.drop(['Country Name', 'Country Code',
                         'Indicator Name'], axis=1)
 
+
 hunSelectedFeatures = hunSelectedFeatures.set_index('Indicator Code').T.reset_index()
 
 plt.clf()
 for i in SELECTED_INDICATORS:
     plt.plot(hunSelectedFeatures['index'],hunSelectedFeatures[i])
+plt.show()
+
+plt.clf()
+plt.imshow(hunSelectedFeatures.corr())
+plt.show()
+
+del hunSelectedFeatures, SELECTED_INDICATORS
+
+'''
+IT.NET.USER.ZS
+IT.NET.SECR.P6
+IT.NET.SECR
+IT.NET.BBND.P2
+IT.NET.BBND
+IT.MLT.MAIN.P2
+IT.MLT.MAIN
+IT.CEL.SETS.P2
+IT.CEL.SETS
+'''
+
+SELECTED_INDICATORS = [
+'IT.NET.USER.ZS',
+'IT.NET.SECR.P6',
+'IT.NET.SECR',
+'IT.NET.BBND.P2',
+'IT.NET.BBND',
+'IT.MLT.MAIN.P2',
+'IT.MLT.MAIN',
+'IT.CEL.SETS.P2',
+'IT.CEL.SETS'
+]
+
+hunIT = hun[hun['Indicator Code'].isin(SELECTED_INDICATORS)]
+hunIT= hunIT.drop(['Country Name', 'Country Code',
+                        'Indicator Name'], axis=1)
+
+
+hunIT = hunIT.set_index('Indicator Code').T.reset_index()
+
+plt.clf()
+for i in SELECTED_INDICATORS:
+    plt.plot(hunIT['index'],hunIT[i])
+plt.show()
+
+plt.clf()
+plt.imshow(hunIT.corr())
 plt.show()
