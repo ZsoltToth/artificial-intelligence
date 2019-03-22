@@ -1,7 +1,7 @@
 '''
 Some quick warm up exercises for part time students
 '''
-
+'''
 def fact(n):
     if(n <= 1):
         return 1
@@ -37,6 +37,8 @@ import matplotlib.pyplot as plt
 plt.plot(x,y)
 plt.show()
 
+'''
+import matplotlib.pyplot as plt
 import pandas as pd
 
 hun = pd.read_excel('./data/hungary.xls',
@@ -49,9 +51,23 @@ mrchExp = mrchExp.drop(['Country Name', 'Country Code',
                         'Indicator Name', 'Indicator Code'], axis=1)
 
 mrchExp = mrchExp.T.reset_index()
-mrchExp = mrchExp.rename(columns={mrchExp.columns[0] : 'years', mrchExp.columns[1] : 'export'})
+mrchExp = mrchExp.rename(columns={mrchExp.columns[0] : 'years',
+                                  mrchExp.columns[1] : 'export'})
 
 plt.clf()
 plt.plot(mrchExp['years'],mrchExp['export'])
 plt.title('Merchandise Export of Hungary US$')
+#plt.savefig('merhandise.png')
+plt.show()
+
+SELECTED_INDICATORS = ['TX.VAL.MRCH.CD.WT','MS.MIL.XPND.CN','MS.MIL.MPRT.KD']
+hunSelectedFeatures = hun[hun['Indicator Code'].isin(SELECTED_INDICATORS)]
+hunSelectedFeatures = hunSelectedFeatures.drop(['Country Name', 'Country Code',
+                        'Indicator Name'], axis=1)
+
+hunSelectedFeatures = hunSelectedFeatures.set_index('Indicator Code').T.reset_index()
+
+plt.clf()
+for i in SELECTED_INDICATORS:
+    plt.plot(hunSelectedFeatures['index'],hunSelectedFeatures[i])
 plt.show()
