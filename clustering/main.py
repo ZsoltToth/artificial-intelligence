@@ -120,3 +120,47 @@ plt.show()
 plt.clf()
 plt.imshow(hunIT.corr())
 plt.show()
+
+'''
+Scaling and PCA
+'''
+
+
+from sklearn.preprocessing import StandardScaler
+hunITFiltered = hunIT.dropna()
+scaledHunIT = StandardScaler().fit_transform(hunITFiltered.drop(['index'], axis=1))
+
+from sklearn.decomposition import PCA
+
+pca = PCA(n_components=2)
+
+pcaDF = pd.DataFrame(data= pca.fit_transform(scaledHunIT),columns=['PC1','PC2'])
+pd.concat([pcaDF,pd.DataFrame(SELECTED_INDICATORS)],axis=1)
+
+plt.clf()
+fig = plt.scatter(pcaDF['PC1'],pcaDF['PC2'])
+plt.title('2D PCA Projection of IT Changes of Hungary between 2010-2017')
+plt.xlabel('PC1')
+plt.ylabel('PC2')
+for i in range(hunITFiltered['index'].values.size):
+    plt.annotate(hunITFiltered['index'].values[i],(pcaDF['PC1'][i],pcaDF['PC2'][i]))
+plt.show()
+
+'''
+Clustering
+'''
+
+from scipy.cluster.hierarchy import single, fcluster
+from scipy.spatial.distance import pdist
+from scipy.cluster.hierarchy import dendrogram
+hunITFilteredDistanceMatrix = pdist(hunITFiltered.drop('index',axis=1).values)
+
+z = single(hunITFilteredDistanceMatrix)
+d = dendrogram(z)
+
+plt.show()
+
+
+from sklearn.cluster import KMeans
+
+kmeans = KMeans(n_clusters=2, random_state=0).fit(hunITFiltered.drop('index',axis=1).values)
