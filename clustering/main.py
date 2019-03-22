@@ -36,3 +36,12 @@ import matplotlib.pyplot as plt
 
 plt.plot(x,y)
 plt.show()
+
+import pandas as pd
+
+hun = pd.read_excel('./data/hungary.xls',
+                    skiprows=[0,1,2],
+                    sheet_name='Data')
+
+#Selec a row based on the value of a column
+hun[hun['Indicator Code'] == 'TX.VAL.MRCH.CD.WT']
