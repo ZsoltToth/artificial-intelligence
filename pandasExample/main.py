@@ -117,3 +117,16 @@ gbr = gbr.drop(['Country Name','Country Code'],axis=1)
 #Next, we set the recently added column as index and transpose the data frame
 #The axis is renamed to Years and the index is reseted.
 gbr = gbr.set_index('Indicator').T.rename_axis("Years").reset_index()
+
+corr = gbr.drop('Years',axis=1).corr().abs()
+
+import matplotlib.pyplot as plt
+
+plt.plot(gbr['Years'],gbr['Charges'],label='Charges')
+plt.plot(gbr['Years'],gbr['Export'],label='Export')
+plt.plot(gbr['Years'],gbr['Expenditure'],label='Expenditure')
+plt.plot(gbr['Years'],gbr['Journals'],label='Journals')
+plt.plot(gbr['Years'],gbr['Researchers'],label='Researchers')
+plt.show()
+
+from sklearn.preprocessing import StandardScaler
