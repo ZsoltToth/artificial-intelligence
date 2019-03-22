@@ -20,5 +20,19 @@ a = [
 ]
 
 b = [7,4,-10]
+x = np.linalg.solve(a,b)
+print(x)
+print(a @ x)
 
-print(np.linalg.solve(a,b))
+del a, b, x
+
+x = np.linspace(0,10,1e3)
+y = np.sin(x)
+
+for i in range(0,x.size):
+    print(x[i],y[i])
+
+import matplotlib.pyplot as plt
+
+plt.plot(x,y)
+plt.show()
