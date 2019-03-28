@@ -11,6 +11,8 @@ Tasks
 '''
 
 #Generate Cities
+#We test the algorithm with some predefined cities
+#These cities should be modified in order to test the algorithm.
 cities = [
     (0,0), (1,2), (3,2), (4,7), (5,5),
     (7,1), (8,7), (7,7), (9,3), (6,3)
@@ -42,15 +44,19 @@ import time
 start_time = time.time()
 for iteration in range(MAX_ITERATION):
     optimum.append(objectFunction([cities[i] for i in path]))
+    #Neighbor Generation
     neighbor = path.copy()
     i,j = rnd.sample(range(0,len(cities)),2)
     tmp = neighbor[i]
     neighbor[i] = neighbor[j]
     neighbor[j] = tmp
     del i,j,tmp
+    '''
+    #Printing of the progress in each step is used for demonstration
     print('itr ', iteration)
     print(path,' ', objectFunction([cities[i] for i in path]))
     print(neighbor,' ',objectFunction([cities[i] for i in neighbor]))
+    '''
     if(objectFunction([cities[i] for i in path]) > objectFunction([cities[i] for i in neighbor])):
         path = neighbor.copy()
         #print('%d Neighbor was better!' % iteration)
@@ -63,6 +69,7 @@ for iteration in range(MAX_ITERATION):
             path = neighbor
             #print('%d Worse neighbor was accepted!' % iteration)
 
+#Calculate the elpased time in order to analyze the functions cost
 elpased_time = time.time() - start_time
 print((
     elpased_time,
