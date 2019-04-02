@@ -129,4 +129,37 @@ plt.plot(gbr['Years'],gbr['Journals'],label='Journals')
 plt.plot(gbr['Years'],gbr['Researchers'],label='Researchers')
 plt.show()
 
+'''
+Perform PCA on the Charges of the countries.
+'''
 from sklearn.preprocessing import StandardScaler
+scaler = StandardScaler()
+
+c = charges.T.drop(['Country Code','Country Name']).apply(pd.to_numeric)
+
+scaledPop = StandardScaler().fit_transform(c.T)
+#This is the same
+#scaler = StandardScaler().fit(popTFiltered)
+#scaler.transform(popTFiltered)
+'''
+We define the number of Principal Components to 2. 
+Hence, the data set can be mapped to a 2D Scatter Chart. 
+'''
+from sklearn.decomposition import PCA
+
+pca = PCA(n_components=2)
+
+pcaDF = pd.DataFrame(data= pca.fit_transform(scaledPop),columns=['PC1','PC2'])
+pd.concat([pcaDF,charges['Country Code']],axis=1)
+
+plt.clf()
+fig = plt.scatter(pcaDF['PC1'],pcaDF['PC2'])
+plt.title('2D PCA Projection of Population Changes of Countries')
+plt.xlabel('PC1')
+plt.ylabel('PC2')
+
+for i in range(0,len(charges['Country Code'].values)):
+    plt.annotate(charges['Country Code'].values[i], (pcaDF['PC1'][i], pcaDF['PC2'][i]))
+plt.show()
+
+plt.clf()
