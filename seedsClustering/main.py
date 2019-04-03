@@ -35,14 +35,18 @@ pca.fit(seeds)
 import matplotlib.pyplot as plt
 pcaMapping = pca.transform(seeds)
 plt.scatter(pcaMapping[:,0],pcaMapping[:,1])
+plt.title('PCA')
 plt.show()
+plt.clf()
 
 #Cluster the seeds with KMeans algorithm
 from sklearn.cluster import KMeans
 
-kmeans = KMeans(n_clusters=3).fit(seeds)
+K=5
+kmeans = KMeans(n_clusters=K).fit(seeds)
 #Visualize the clusters
-plt.clf()
+
+'''
 plt.scatter(pcaMapping[kmeans.labels_==0][:,0],
             pcaMapping[kmeans.labels_ == 0][:, 1],
             marker='.')
@@ -52,4 +56,23 @@ plt.scatter(pcaMapping[kmeans.labels_==1][:,0],
 plt.scatter(pcaMapping[kmeans.labels_==2][:,0],
             pcaMapping[kmeans.labels_ == 2][:, 1],
             marker='v')
+'''
+for i in range(0,K):
+    plt.scatter(pcaMapping[kmeans.labels_ == i][:, 0],
+                pcaMapping[kmeans.labels_ == i][:, 1])
+plt.title('K-Means Results')
 plt.show()
+plt.clf()
+#Cluster the seeds with DBSCAN Algorithm
+from sklearn.cluster import DBSCAN
+from sklearn.preprocessing import StandardScaler
+scaler = StandardScaler().fit(seeds)
+dbscan = DBSCAN(eps=1, min_samples=3).fit(scaler.transform(seeds))
+
+
+for i in range(0,K):
+    plt.scatter(pcaMapping[dbscan.labels_ == i][:, 0],
+                pcaMapping[dbscan.labels_ == i][:, 1])
+plt.title('DBSCAN Results')
+plt.show()
+plt.clf()
