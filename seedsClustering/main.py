@@ -12,6 +12,7 @@ http://archive.ics.uci.edu/ml/datasets/seeds
 7. length of kernel groove.
 '''
 
+#Read the data set
 import pandas as pd
 
 seeds = pd.read_csv('data/seeds_dataset.txt',
@@ -24,13 +25,31 @@ seeds = pd.read_csv('data/seeds_dataset.txt',
                            'asymmetryCoeff',
                            'kernelGroove'])
 
+#Remove records containing nan.
 seeds = seeds.dropna()
 from sklearn.decomposition import PCA
 
 pca = PCA(n_components=2)
 pca.fit(seeds)
-
+#Visualize PCA Results
 import matplotlib.pyplot as plt
+pcaMapping = pca.transform(seeds)
+plt.scatter(pcaMapping[:,0],pcaMapping[:,1])
+plt.show()
 
-plt.scatter(pca.transform(seeds)[:,0],pca.transform(seeds)[:,1])
+#Cluster the seeds with KMeans algorithm
+from sklearn.cluster import KMeans
+
+kmeans = KMeans(n_clusters=3).fit(seeds)
+#Visualize the clusters
+plt.clf()
+plt.scatter(pcaMapping[kmeans.labels_==0][:,0],
+            pcaMapping[kmeans.labels_ == 0][:, 1],
+            marker='.')
+plt.scatter(pcaMapping[kmeans.labels_==1][:,0],
+            pcaMapping[kmeans.labels_ == 1][:, 1],
+            marker='o')
+plt.scatter(pcaMapping[kmeans.labels_==2][:,0],
+            pcaMapping[kmeans.labels_ == 2][:, 1],
+            marker='v')
 plt.show()
