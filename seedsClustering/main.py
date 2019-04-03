@@ -23,3 +23,14 @@ seeds = pd.read_csv('data/seeds_dataset.txt',
                            'kernelWidth',
                            'asymmetryCoeff',
                            'kernelGroove'])
+
+seeds = seeds.dropna()
+from sklearn.decomposition import PCA
+
+pca = PCA(n_components=2)
+pca.fit(seeds)
+
+import matplotlib.pyplot as plt
+
+plt.scatter(pca.transform(seeds)[:,0],pca.transform(seeds)[:,1])
+plt.show()
