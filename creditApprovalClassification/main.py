@@ -71,3 +71,15 @@ from sklearn.neighbors import KNeighborsClassifier
 knn = [KNeighborsClassifier(n_neighbors=i) for i in {3,5,7} ]
 scoreKNN = [cross_val_score(knn_i, X,Y,cv=5) for knn_i in knn]
 
+#GridSearchCV
+from sklearn.model_selection import GridSearchCV
+
+mlpParameters = {
+    'hidden_layer_sizes':[(3,4,5),(10,20,10),(10,5,2)],
+    'activation':('tanh','relu','logistic'),
+    'solver':('sgd','adam'),
+    'learning_rate':('constant','adaptive')
+}
+mlp = MLPClassifier()
+gridSearch = GridSearchCV(mlp,mlpParameters, cv=3)
+gridSearch.fit(X,Y)
