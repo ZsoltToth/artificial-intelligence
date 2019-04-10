@@ -65,4 +65,9 @@ from sklearn.model_selection import cross_val_score
 scoreMLP = cross_val_score(mlp, X,Y,cv=5)
 scoreDT = cross_val_score(decisionTree, X,Y,cv=5)
 
+#Test 3 different KNN Classifiers
+from sklearn.neighbors import KNeighborsClassifier
+
+knn = [KNeighborsClassifier(n_neighbors=i) for i in {3,5,7} ]
+scoreKNN = [cross_val_score(knn_i, X,Y,cv=5) for knn_i in knn]
 
