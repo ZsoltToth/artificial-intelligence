@@ -35,15 +35,34 @@ Y = dataset['A16'].cat.codes
 from sklearn import tree
 from sklearn.neural_network import MLPClassifier
 
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, Y_train, Y_test = train_test_split(X,Y)
+
 decisionTree = tree.DecisionTreeClassifier()
-decisionTree.fit(X,Y)
+decisionTree.fit(X_train,Y_train)
 
 mlp = MLPClassifier(
     hidden_layer_sizes=(5,7,5,3),
     activation='tanh',
     solver='sgd')
 
-mlp.fit(X,Y)
-
+mlp.fit(X_train,Y_train)
+'''
 #pd.DataFrame(decisionTree.predict(X) == Y).groupby(0).size()
+
+pd.DataFrame(mlp.predict(X_test) == Y_test).groupby(0).size()
+pd.DataFrame(decisionTree.predict(X_test) == Y_test).groupby(0).size()
+
+mlp.score(X_test,Y_test)
+0.6526946107784432
+decisionTree.score(X_test,Y_test)
+0.8023952095808383
+'''
+
+from sklearn.model_selection import cross_val_score
+
+scoreMLP = cross_val_score(mlp, X,Y,cv=5)
+scoreDT = cross_val_score(decisionTree, X,Y,cv=5)
+
 
