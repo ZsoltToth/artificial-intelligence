@@ -11,6 +11,7 @@ import numpy as np
 
 POPULATION_SIZE = 10
 WEIGHT_LIMIT = 30
+ITERATION_COUNT = 5
 
 def objectiveFunction(solution, dataset, weightLimit):
     if (solution * dataset['Weight']).sum() > weightLimit:
@@ -51,25 +52,32 @@ dataset = pandas.read_csv('data/dataset.csv', delimiter=';')
 population = [np.random.random_integers(0,1,dataset.shape[0]) for i in range(0,POPULATION_SIZE)]
 population = np.array(population)
 
-#Calculate Fitness Values for Indivitual Solutions
-fitness_values = [objectiveFunction(sol,dataset, WEIGHT_LIMIT) for sol in population]
-fitness_values = np.array(fitness_values)
+for iteration in range(0,ITERATION_COUNT):
+    #Calculate Fitness Values for Indivitual Solutions
+    fitness_values = [objectiveFunction(sol,dataset, WEIGHT_LIMIT) for sol in population]
+    fitness_values = np.array(fitness_values)
 
-#Sort population by fitness values
-population = population[fitness_values.argsort()]
-fitness_values = fitness_values[fitness_values.argsort()]
+    #Sort population by fitness values
+    population = population[fitness_values.argsort()]
+    fitness_values = fitness_values[fitness_values.argsort()]
 
-#Remove Invalid Solution
-population = population[fitness_values > 0]
-fitness_values = fitness_values[fitness_values > 0]
+    #Remove Invalid Solution
+    population = population[fitness_values > 0]
+    fitness_values = fitness_values[fitness_values > 0]
 
-for i in range(0,fitness_values.shape[0]):
-    print(population[i], ' -> ',fitness_values[i])
+    print('#',iteration)
+    for i in range(0,fitness_values.shape[0]):
+        print(population[i], ' -> ',fitness_values[i])
 
-next_population = np.zeros([POPULATION_SIZE, dataset.shape[0]])
+    next_population = np.zeros([POPULATION_SIZE, dataset.shape[0]])
 
-for i in range(0,POPULATION_SIZE):
-    selected = selectionOperator(fitness_values)
-    next_population[i] = crossover(
-        population[selected[0]],
-        population[selected[1]])
+    for i in range(0,POPULATION_SIZE):
+        selected = selectionOperator(fitness_values)
+        next_population[i] = crossover(
+            population[selected[0]],
+            population[selected[1]])
+    if iteration != ITERATION_COUNT -1:
+        population = next_population
+
+#Print 5 best solutions
+print(np.flip(population)[:5])
